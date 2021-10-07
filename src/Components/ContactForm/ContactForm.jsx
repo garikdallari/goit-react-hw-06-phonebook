@@ -1,4 +1,6 @@
-import { React, useState } from "react";
+import { useState } from "react";
+import { connect } from "react-redux";
+import { addContact } from "../../redux/actions/contacts";
 import PropTypes from "prop-types";
 import { Form } from "./ContactForm.styled";
 import { MdPersonAdd } from "react-icons/md";
@@ -6,10 +8,9 @@ import Button from "../Utils/Button/Button";
 import Title from "../Utils/Title/Title";
 import Input from "../Utils/Input/Input";
 
-function ContactForm({ onSubmit }) {
+function ContactForm({ contacts, onSubmit }) {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -27,6 +28,24 @@ function ContactForm({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const checkOnSameContact = contacts.find(
+      (contact) => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    if (checkOnSameContact) {
+      alert(`${name} is already in contacts`);
+      setName("");
+      setNumber("");
+      return;
+    }
+    if (name === "" && number === "") {
+      return;
+    }
+    if (name === "" || number === "") {
+      alert("Pleasy fill empty fields");
+      return;
+    }
+
     onSubmit({ name, number });
     setName("");
     setNumber("");
@@ -66,7 +85,15 @@ function ContactForm({ onSubmit }) {
   );
 }
 
-export default ContactForm;
+const mapStateToProps = (state) => ({
+  contacts: state.contacts,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit: (data) => dispatch(addContact(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
 
 ContactForm.propTypes = {
   contacts: PropTypes.arrayOf(

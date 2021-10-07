@@ -1,4 +1,5 @@
-import React from "react";
+import { connect } from "react-redux";
+import { deleteContact } from "../../redux/actions/contacts";
 import ContactItem from "../ContactItem/ContactItem";
 import PropTypes from "prop-types";
 import Button from "../Utils/Button/Button";
@@ -36,4 +37,18 @@ ContactList.propTypes = {
   onDeleteContact: PropTypes.func.isRequired,
 };
 
-export default ContactList;
+const filterByName = (state) => {
+  return state.contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(state.filter.toLowerCase())
+  );
+};
+
+const mapStateToProps = (state) => ({
+  contacts: filterByName(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onDeleteContact: (id) => dispatch(deleteContact(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
