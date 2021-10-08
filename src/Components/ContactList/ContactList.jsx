@@ -38,8 +38,8 @@ ContactList.propTypes = {
 };
 
 const filterByName = (state) => {
-  return state.contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(state.filter.toLowerCase())
+  return state.contacts.items.filter((contact) =>
+    contact.name.toLowerCase().includes(state.contacts.filter.toLowerCase())
   );
 };
 

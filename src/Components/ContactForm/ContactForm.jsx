@@ -39,10 +39,11 @@ function ContactForm({ contacts, onSubmit }) {
       return;
     }
     if (name === "" && number === "") {
+      alert("Please fill empty fields");
       return;
     }
     if (name === "" || number === "") {
-      alert("Pleasy fill empty fields");
+      alert("Please fill empty fields");
       return;
     }
 
@@ -86,7 +87,7 @@ function ContactForm({ contacts, onSubmit }) {
 }
 
 const mapStateToProps = (state) => ({
-  contacts: state.contacts,
+  contacts: state.contacts.items,
 });
 
 const mapDispatchToProps = (dispatch) => ({
